@@ -64,7 +64,7 @@ app = FastAPI(
     description="Multi-agent RAG system for defence/geopolitical evidence analysis.",
     version="1.0.0",
 )
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+
 # Allow the plain HTML/JS frontend (served separately, e.g. via file:// or
 # a simple static server on a different port) to call this API.
 app.add_middleware(
@@ -122,3 +122,4 @@ def assess(request: AssessRequest, x_api_key: str | None = Header(default=None))
         "report": report.model_dump(mode="json"),
         "errors": final_state.get("errors", []),
     }
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
