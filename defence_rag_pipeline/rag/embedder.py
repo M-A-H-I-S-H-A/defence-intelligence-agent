@@ -22,9 +22,10 @@ _model = None
 def get_model(model_name: str):
     global _model
     if _model is None:
+        print(f"[CHECKPOINT] Starting to load embedding model: {model_name}", flush=True)
         from sentence_transformers import SentenceTransformer
-        logger.info("Loading embedding model: %s", model_name)
         _model = SentenceTransformer(model_name)
+        print(f"[CHECKPOINT] Finished loading embedding model", flush=True)
     return _model
 
 
