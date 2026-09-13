@@ -134,8 +134,8 @@ class RealRetriever(BaseRetriever):
         from pipeline import answer_query  # imported lazily so app startup
         self._answer_query = answer_query   # doesn't fail if the folder is missing
 
-        def retrieve(self, query: str, top_k: int = 5) -> list[RetrievedDocument]:
-            print(f"[CHECKPOINT] RealRetriever.retrieve called with query: {query}", flush=True)
+    def retrieve(self, query: str, top_k: int = 5) -> list[RetrievedDocument]:
+        print(f"[CHECKPOINT] RealRetriever.retrieve called with query: {query}", flush=True)
         raw_results = self._answer_query(query)  # already ranked evidence
         print(f"[CHECKPOINT] answer_query returned {len(raw_results)} results", flush=True)
 
