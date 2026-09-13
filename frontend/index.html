@@ -17,73 +17,71 @@
     --critical: #e0483b;
   }
   * { box-sizing: border-box; }
-  body {
+  html, body {
     margin: 0;
+    height: 100%;
     font-family: -apple-system, Segoe UI, Roboto, sans-serif;
     background: var(--bg);
     color: var(--text);
   }
-  header {
-    padding: 24px 32px;
-    border-bottom: 1px solid var(--border);
+  body {
+    display: flex;
+    flex-direction: column;
   }
-  header h1 { margin: 0; font-size: 20px; }
-  header p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+  header {
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  header h1 { margin: 0; font-size: 18px; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
 
-  main {
+  #chatLog {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 20px 12px;
+  }
+  .chat-inner {
     max-width: 860px;
     margin: 0 auto;
-    padding: 32px 20px 80px;
   }
 
-  .query-box {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 24px;
+  .empty-state {
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+    margin-top: 60px;
   }
-  .query-box input[type="text"] {
-    flex: 1;
-    padding: 12px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--panel);
-    color: var(--text);
-    font-size: 15px;
-  }
-  .query-box button {
-    padding: 12px 20px;
-    border-radius: 8px;
-    border: none;
+
+  .turn { margin-bottom: 22px; }
+
+  .user-bubble {
     background: var(--accent);
     color: white;
-    font-weight: 600;
-    cursor: pointer;
+    padding: 10px 16px;
+    border-radius: 14px 14px 4px 14px;
+    max-width: 75%;
+    margin-left: auto;
+    font-size: 15px;
+    line-height: 1.5;
+    white-space: pre-wrap;
   }
-  .query-box button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .user-row { display: flex; margin-bottom: 8px; }
 
-  .settings {
-    margin-bottom: 20px;
-    font-size: 13px;
+  .assistant-row { display: flex; flex-direction: column; }
+
+  .status-line {
     color: var(--muted);
-  }
-  .settings input {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    color: var(--text);
-    border-radius: 6px;
-    padding: 4px 8px;
     font-size: 13px;
-    width: 220px;
+    margin: 4px 0 12px 2px;
   }
-
-  .status { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
   .error-box {
     background: #2a1414;
     border: 1px solid var(--critical);
     color: #ffb3ab;
     padding: 12px 16px;
     border-radius: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     font-size: 14px;
   }
 
@@ -91,12 +89,12 @@
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 20px 22px;
-    margin-bottom: 18px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
   }
   .card h2 {
-    margin: 0 0 10px;
-    font-size: 14px;
+    margin: 0 0 8px;
+    font-size: 13px;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--muted);
@@ -142,46 +140,143 @@
     background: var(--accent);
     height: 100%;
   }
+
+  .typing-dots span {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 3px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: blink 1.2s infinite;
+  }
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%, 80%, 100% { opacity: 0.2; } 40% { opacity: 1; } }
+
+  footer {
+    flex-shrink: 0;
+    border-top: 1px solid var(--border);
+    padding: 14px 20px;
+  }
+  .input-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+  }
+  #queryInput {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    font-size: 15px;
+    resize: none;
+  }
+  #submitBtn {
+    padding: 0 22px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #submitBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .new-chat-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    float: right;
+    margin-top: -30px;
+  }
+  .new-chat-btn:hover { color: var(--text); border-color: var(--accent); }
+
+  .settings { display: none; }
 </style>
 </head>
 <body>
 
 <header>
+  <button class="new-chat-btn" onclick="startNewChat()">New chat</button>
   <h1>Defence Intelligence &amp; Decision Support</h1>
   <p>Autonomous multi-agent RAG system — SIPRI + GDELT evidence, analyzed and risk-assessed</p>
 </header>
 
-<main>
-  <div class="settings" style="display:none">
-    API base URL:
-    <input type="text" id="apiBase" value="" />
-    &nbsp;&nbsp;API key:
-    <input type="text" id="apiKey" value="my-secret-key-123" />
+<div class="settings">
+  <input type="text" id="apiBase" value="" />
+  <input type="text" id="apiKey" value="my-secret-key-123" />
 </div>
 
-  <div class="query-box">
-    <input type="text" id="queryInput" placeholder="e.g. Assess the emerging security situation involving India" />
-    <button id="submitBtn" onclick="submitQuery()">Assess</button>
+<div id="chatLog">
+  <div class="chat-inner" id="chatInner">
+    <div class="empty-state" id="emptyState">Ask a question to start — e.g. "Assess the emerging security situation involving India"</div>
   </div>
+</div>
 
-  <div id="status" class="status"></div>
-  <div id="results"></div>
-</main>
+<footer>
+  <div class="input-inner">
+    <textarea id="queryInput" rows="1" placeholder="Ask about a country, region, or situation..."></textarea>
+    <button id="submitBtn" onclick="submitQuery()">Send</button>
+  </div>
+</footer>
 
 <script>
+let sessionId = localStorage.getItem('chatSessionId');
+if (!sessionId) {
+  sessionId = crypto.randomUUID();
+  localStorage.setItem('chatSessionId', sessionId);
+}
+
+function startNewChat() {
+  sessionId = crypto.randomUUID();
+  localStorage.setItem('chatSessionId', sessionId);
+  document.getElementById('chatInner').innerHTML =
+    '<div class="empty-state" id="emptyState">Ask a question to start — e.g. "Assess the emerging security situation involving India"</div>';
+}
+
+function scrollToBottom() {
+  const log = document.getElementById('chatLog');
+  log.scrollTop = log.scrollHeight;
+}
+
 async function submitQuery() {
-  const query = document.getElementById('queryInput').value.trim();
+  const input = document.getElementById('queryInput');
+  const query = input.value.trim();
   const apiBase = document.getElementById('apiBase').value.trim().replace(/\/$/, '');
   const apiKey = document.getElementById('apiKey').value.trim();
-  const statusEl = document.getElementById('status');
-  const resultsEl = document.getElementById('results');
   const btn = document.getElementById('submitBtn');
+  const chatInner = document.getElementById('chatInner');
 
-  if (!query) { statusEl.textContent = 'Enter a question first.'; return; }
+  if (!query) return;
+
+  const emptyState = document.getElementById('emptyState');
+  if (emptyState) emptyState.remove();
+
+  // Render the user's message immediately
+  const turnId = 'turn-' + Date.now();
+  const userDiv = document.createElement('div');
+  userDiv.className = 'turn';
+  userDiv.innerHTML = `
+    <div class="user-row"><div class="user-bubble">${escapeHtml(query)}</div></div>
+    <div class="assistant-row" id="${turnId}">
+      <div class="status-line typing-dots"><span></span><span></span><span></span></div>
+    </div>
+  `;
+  chatInner.appendChild(userDiv);
+  input.value = '';
+  autoResize(input);
+  scrollToBottom();
 
   btn.disabled = true;
-  statusEl.textContent = 'Running the agent workflow (retrieval → analysis → verification → risk → report)...';
-  resultsEl.innerHTML = '';
+  input.disabled = true;
 
   try {
     const resp = await fetch(`${apiBase}/assess`, {
@@ -190,30 +285,31 @@ async function submitQuery() {
         'Content-Type': 'application/json',
         'X-API-Key': apiKey,
       },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({ query, session_id: sessionId }),
     });
 
     const data = await resp.json();
+    const target = document.getElementById(turnId);
 
     if (!resp.ok) {
-      statusEl.textContent = '';
       const detail = typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
-      resultsEl.innerHTML = `<div class="error-box">Request failed (${resp.status}): ${escapeHtml(detail)}</div>`;
+      target.innerHTML = `<div class="error-box">Request failed (${resp.status}): ${escapeHtml(detail)}</div>`;
       return;
     }
 
-    statusEl.textContent = '';
-    renderReport(data.report, data.errors || []);
+    target.innerHTML = renderReport(data.report, data.errors || []);
   } catch (err) {
-    statusEl.textContent = '';
-    resultsEl.innerHTML = `<div class="error-box">Could not reach the API at ${escapeHtml(apiBase)}. Is the backend running? (${escapeHtml(String(err))})</div>`;
+    const target = document.getElementById(turnId);
+    target.innerHTML = `<div class="error-box">Could not reach the API at "${escapeHtml(apiBase)}". Is the backend running? (${escapeHtml(String(err))})</div>`;
   } finally {
     btn.disabled = false;
+    input.disabled = false;
+    input.focus();
+    scrollToBottom();
   }
 }
 
 function renderReport(report, errors) {
-  const resultsEl = document.getElementById('results');
   let html = '';
 
   if (errors && errors.length > 0) {
@@ -274,12 +370,12 @@ function renderReport(report, errors) {
     </div>
   `;
 
-  resultsEl.innerHTML = html;
+  return html;
 }
 
 function renderList(title, items) {
   if (!items || items.length === 0) {
-    return title ? `<p style="color:var(--muted)">None reported.</p>` : `<p style="color:var(--muted)">None reported.</p>`;
+    return `<p style="color:var(--muted)">None reported.</p>`;
   }
   const listHtml = `<ul>${items.map(i => `<li>${escapeHtml(String(i))}</li>`).join('')}</ul>`;
   return title ? `<p><strong>${escapeHtml(title)}</strong></p>${listHtml}` : listHtml;
@@ -308,8 +404,18 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-document.getElementById('queryInput').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') submitQuery();
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+}
+
+const queryInput = document.getElementById('queryInput');
+queryInput.addEventListener('input', () => autoResize(queryInput));
+queryInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    submitQuery();
+  }
 });
 </script>
 
