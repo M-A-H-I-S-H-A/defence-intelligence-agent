@@ -2,6 +2,6 @@ pandas>=2.0
 openpyxl>=3.1          # for reading SIPRI .xlsx
 requests>=2.31
 matplotlib>=3.7
-sentence-transformers>=2.6
+onnxruntime>=1.17
 chromadb>=0.5
 numpy>=1.26

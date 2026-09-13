@@ -30,7 +30,7 @@ for d in [RAW_DIR, CLEAN_DIR, CHUNK_DIR, EDA_DIR, CHROMA_DIR]:
 # workbook (no public API). Point this at the file your teammate/you
 # downloaded from https://www.sipri.org/databases/milex
 SIPRI_RAW_FILE = RAW_DIR / "sipri_milex.xlsx"
-SIPRI_SHEET_NAME = "Constant (2022) US$"  # change to whichever sheet you use
+SIPRI_SHEET_NAME = "Constant (2024) US$"  # change to whichever sheet you use
 SIPRI_CLEAN_FILE = CLEAN_DIR / "sipri_clean.csv"
 
 # ---------------------------------------------------------------------------

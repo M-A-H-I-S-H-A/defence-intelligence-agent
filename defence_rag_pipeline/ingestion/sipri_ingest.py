@@ -36,7 +36,8 @@ def load_sipri_raw(file_path: Path, sheet_name: str) -> pd.DataFrame:
     preview = pd.read_excel(file_path, sheet_name=sheet_name, header=None, nrows=15)
     header_row = None
     for i, row in preview.iterrows():
-        if row.astype(str).str.contains("Country", case=False, na=False).any():
+        first_cell = str(row.iloc[0]).strip().lower()
+        if first_cell == "country":
             header_row = i
             break
     if header_row is None:
@@ -64,7 +65,7 @@ def reshape_sipri_to_long(df: pd.DataFrame, currency_basis: str) -> pd.DataFrame
     # SIPRI uses ".." for missing/undisclosed spending and "xxx" for N/A
     long_df["expenditure_usd"] = pd.to_numeric(
         long_df["expenditure_usd"], errors="coerce"
-    )
+    ) * 1_000_000  # SIPRI sheet values are in US$ millions
     long_df["currency_basis"] = currency_basis
     long_df["source"] = "sipri"
     return long_df

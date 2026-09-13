@@ -1,12 +1,10 @@
 """
 Embedding generation.
 
-Uses sentence-transformers (all-MiniLM-L6-v2 by default: 384-dim, small,
-fast on CPU — fine for a class/hackathon-scale project and for the demo
-laptop your teammate will run the Streamlit dashboard on). Swap the model
-name in config.py if you later want higher quality (e.g. bge-small-en,
-or a Gemini embedding endpoint, since the rest of the project already
-uses Gemini for the agents).
+Uses ChromaDB's built-in ONNX-based MiniLM embedding function
+(onnxruntime — no PyTorch) instead of sentence-transformers, to keep
+memory usage low enough for constrained hosting (e.g. Render's free
+512MB tier). Same underlying MiniLM model family, much lighter runtime.
 """
 
 from __future__ import annotations
@@ -16,25 +14,24 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
-_model = None
+_embedding_fn = None
 
 
-def get_model(model_name: str):
-    global _model
-    if _model is None:
-        print(f"[CHECKPOINT] Starting to load embedding model: {model_name}", flush=True)
-        from sentence_transformers import SentenceTransformer
-        _model = SentenceTransformer(model_name)
-        print(f"[CHECKPOINT] Finished loading embedding model", flush=True)
-    return _model
+def _get_embedding_fn():
+    global _embedding_fn
+    if _embedding_fn is None:
+        from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
+        logger.info("Loading ONNX MiniLM embedding function (no PyTorch)")
+        _embedding_fn = DefaultEmbeddingFunction()
+    return _embedding_fn
 
 
-def embed_texts(texts: List[str], model_name: str, batch_size: int = 64) -> np.ndarray:
-    model = get_model(model_name)
-    embeddings = model.encode(
-        texts,
-        batch_size=batch_size,
-        show_progress_bar=len(texts) > 200,
-        normalize_embeddings=True,  # so cosine similarity == dot product
-    )
-    return np.asarray(embeddings)
+def embed_texts(texts: List[str], model_name: str = None, batch_size: int = 64) -> np.ndarray:
+    """model_name is kept for compatibility with existing call sites but
+    is ignored — this always uses ChromaDB's lightweight ONNX model."""
+    fn = _get_embedding_fn()
+    embeddings = fn(texts)
+    arr = np.asarray(embeddings, dtype=np.float32)
+    norms = np.linalg.norm(arr, axis=1, keepdims=True)
+    norms[norms == 0] = 1e-8
+    return arr / norms
