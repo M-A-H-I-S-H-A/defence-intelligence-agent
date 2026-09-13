@@ -28,13 +28,16 @@
     display: flex;
     flex-direction: column;
   }
-  header {
+ header {
     padding: 18px 32px;
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
-  }
-  header h1 { margin: 0; font-size: 18px; }
-  header p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+header h1 { margin: 0; font-size: 18px; }
+header p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
 
   #chatLog {
     flex: 1;
@@ -191,12 +194,12 @@
     border: 1px solid var(--border);
     color: var(--muted);
     border-radius: 6px;
-    padding: 4px 10px;
+    padding: 6px 12px;
     font-size: 12px;
     cursor: pointer;
-    float: right;
-    margin-top: -30px;
-  }
+    flex-shrink: 0;
+    align-self: center;
+}
   .new-chat-btn:hover { color: var(--text); border-color: var(--accent); }
 
   .settings { display: none; }
@@ -205,9 +208,11 @@
 <body>
 
 <header>
+  <div>
+    <h1>Defence Intelligence &amp; Decision Support</h1>
+    <p>Autonomous multi-agent RAG system — SIPRI + GDELT evidence, analyzed and risk-assessed</p>
+  </div>
   <button class="new-chat-btn" onclick="startNewChat()">New chat</button>
-  <h1>Defence Intelligence &amp; Decision Support</h1>
-  <p>Autonomous multi-agent RAG system — SIPRI + GDELT evidence, analyzed and risk-assessed</p>
 </header>
 
 <div class="settings">
