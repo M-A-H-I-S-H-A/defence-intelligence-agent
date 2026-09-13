@@ -1,0 +1,13 @@
+country,year,expenditure_usd,currency_basis,source
+India,2021,76600000000,Constant (2022) US$,sipri
+India,2022,81400000000,Constant (2022) US$,sipri
+India,2023,83600000000,Constant (2022) US$,sipri
+China,2021,293000000000,Constant (2022) US$,sipri
+China,2022,296000000000,Constant (2022) US$,sipri
+China,2023,309000000000,Constant (2022) US$,sipri
+Pakistan,2021,11300000000,Constant (2022) US$,sipri
+Pakistan,2022,10300000000,Constant (2022) US$,sipri
+Pakistan,2023,10800000000,Constant (2022) US$,sipri
+United States,2021,801000000000,Constant (2022) US$,sipri
+United States,2022,877000000000,Constant (2022) US$,sipri
+United States,2023,916000000000,Constant (2022) US$,sipri

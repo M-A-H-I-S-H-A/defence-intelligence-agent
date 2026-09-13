@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Defence Intelligence & Decision Support</title>
+<style>
+  :root {
+    --bg: #0b1220;
+    --panel: #121b2e;
+    --border: #22304a;
+    --text: #e6ecf5;
+    --muted: #93a3bd;
+    --accent: #4f8cff;
+    --low: #2fae66;
+    --medium: #e6b93b;
+    --high: #e07b3b;
+    --critical: #e0483b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { margin: 0; font-size: 20px; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  .query-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .query-box input[type="text"] {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    font-size: 15px;
+  }
+  .query-box button {
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .query-box button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .settings {
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .settings input {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 13px;
+    width: 220px;
+  }
+
+  .status { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+  .error-box {
+    background: #2a1414;
+    border: 1px solid var(--critical);
+    color: #ffb3ab;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+  }
+  .card h2 {
+    margin: 0 0 10px;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .card p { margin: 0; line-height: 1.6; font-size: 15px; }
+  .card ul { margin: 8px 0 0; padding-left: 20px; line-height: 1.7; font-size: 14px; }
+
+  .risk-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .risk-LOW { background: rgba(47,174,102,0.15); color: var(--low); }
+  .risk-MEDIUM { background: rgba(230,185,59,0.15); color: var(--medium); }
+  .risk-HIGH { background: rgba(224,123,59,0.15); color: var(--high); }
+  .risk-CRITICAL { background: rgba(224,72,59,0.15); color: var(--critical); }
+
+  .evidence-item {
+    border-top: 1px solid var(--border);
+    padding: 12px 0;
+    font-size: 14px;
+  }
+  .evidence-item:first-child { border-top: none; padding-top: 0; }
+  .evidence-source {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .confidence-bar-track {
+    background: var(--border);
+    border-radius: 999px;
+    height: 8px;
+    width: 100%;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+  .confidence-bar-fill {
+    background: var(--accent);
+    height: 100%;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Defence Intelligence &amp; Decision Support</h1>
+  <p>Autonomous multi-agent RAG system — SIPRI + GDELT evidence, analyzed and risk-assessed</p>
+</header>
+
+<main>
+  <div class="settings" style="display:none">
+    API base URL:
+    <input type="text" id="apiBase" value="" />
+    &nbsp;&nbsp;API key:
+    <input type="text" id="apiKey" value="my-secret-key-123" />
+</div>
+
+  <div class="query-box">
+    <input type="text" id="queryInput" placeholder="e.g. Assess the emerging security situation involving India" />
+    <button id="submitBtn" onclick="submitQuery()">Assess</button>
+  </div>
+
+  <div id="status" class="status"></div>
+  <div id="results"></div>
+</main>
+
+<script>
+async function submitQuery() {
+  const query = document.getElementById('queryInput').value.trim();
+  const apiBase = document.getElementById('apiBase').value.trim().replace(/\/$/, '');
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const statusEl = document.getElementById('status');
+  const resultsEl = document.getElementById('results');
+  const btn = document.getElementById('submitBtn');
+
+  if (!query) { statusEl.textContent = 'Enter a question first.'; return; }
+
+  btn.disabled = true;
+  statusEl.textContent = 'Running the agent workflow (retrieval → analysis → verification → risk → report)...';
+  resultsEl.innerHTML = '';
+
+  try {
+    const resp = await fetch(`${apiBase}/assess`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': apiKey,
+      },
+      body: JSON.stringify({ query }),
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      statusEl.textContent = '';
+      const detail = typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
+      resultsEl.innerHTML = `<div class="error-box">Request failed (${resp.status}): ${escapeHtml(detail)}</div>`;
+      return;
+    }
+
+    statusEl.textContent = '';
+    renderReport(data.report, data.errors || []);
+  } catch (err) {
+    statusEl.textContent = '';
+    resultsEl.innerHTML = `<div class="error-box">Could not reach the API at ${escapeHtml(apiBase)}. Is the backend running? (${escapeHtml(String(err))})</div>`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function renderReport(report, errors) {
+  const resultsEl = document.getElementById('results');
+  let html = '';
+
+  if (errors && errors.length > 0) {
+    html += `<div class="error-box">Some agents reported non-fatal errors: ${errors.map(escapeHtml).join(' | ')}</div>`;
+  }
+
+  const risk = report.risk_assessment || {};
+  html += `
+    <div class="card">
+      <h2>Executive Summary</h2>
+      <p>${escapeHtml(report.executive_summary || '—')}</p>
+    </div>
+
+    <div class="card">
+      <h2>Risk Assessment</h2>
+      <span class="risk-badge risk-${risk.risk_level || 'LOW'}">${risk.risk_level || 'UNKNOWN'}</span>
+      <span style="margin-left:10px; color:var(--muted); font-size:13px;">score ${risk.risk_score ?? '—'}/100</span>
+      <p style="margin-top:10px;">${escapeHtml(risk.reasoning_summary || '')}</p>
+      ${renderList('Risk factors', risk.risk_factors)}
+    </div>
+
+    <div class="card">
+      <h2>Threat Overview</h2>
+      <p>${escapeHtml(report.threat_overview || '—')}</p>
+    </div>
+
+    <div class="card">
+      <h2>Key Findings</h2>
+      ${renderList(null, report.key_findings)}
+    </div>
+
+    <div class="card">
+      <h2>Verified Facts</h2>
+      ${renderList(null, report.verified_facts)}
+    </div>
+
+    <div class="card">
+      <h2>Supporting Evidence</h2>
+      ${renderEvidence(report.supporting_evidence)}
+    </div>
+
+    <div class="card">
+      <h2>Recommendations</h2>
+      ${renderList(null, report.recommendations)}
+    </div>
+
+    <div class="card">
+      <h2>Confidence</h2>
+      <div class="confidence-bar-track">
+        <div class="confidence-bar-fill" style="width:${Math.round((report.confidence || 0) * 100)}%"></div>
+      </div>
+      <p style="margin-top:6px; font-size:13px; color:var(--muted);">${Math.round((report.confidence || 0) * 100)}%</p>
+    </div>
+
+    <div class="card">
+      <h2>Sources</h2>
+      ${renderList(null, report.sources)}
+    </div>
+  `;
+
+  resultsEl.innerHTML = html;
+}
+
+function renderList(title, items) {
+  if (!items || items.length === 0) {
+    return title ? `<p style="color:var(--muted)">None reported.</p>` : `<p style="color:var(--muted)">None reported.</p>`;
+  }
+  const listHtml = `<ul>${items.map(i => `<li>${escapeHtml(String(i))}</li>`).join('')}</ul>`;
+  return title ? `<p><strong>${escapeHtml(title)}</strong></p>${listHtml}` : listHtml;
+}
+
+function renderEvidence(evidence) {
+  if (!evidence || evidence.length === 0) {
+    return `<p style="color:var(--muted)">None reported.</p>`;
+  }
+  return evidence.map(e => `
+    <div class="evidence-item">
+      <div>${escapeHtml(e.finding || '')}</div>
+      <div style="margin-top:4px; color:var(--text); opacity:0.85;">${escapeHtml(e.evidence || '')}</div>
+      <div class="evidence-source">
+        ${escapeHtml(e.source || 'unknown source')}
+        ${e.publication_date ? ' · ' + escapeHtml(e.publication_date) : ''}
+        ${e.verification_status ? ' · ' + escapeHtml(e.verification_status) : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+document.getElementById('queryInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') submitQuery();
+});
+</script>
+
+</body>
+</html>

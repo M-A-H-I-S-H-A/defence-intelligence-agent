@@ -1,0 +1,154 @@
+{
+  "documents": [
+    {
+      "document_id": "DOC001",
+      "title": "Rising Cyber Intrusions Targeting Regional Power Grids",
+      "content": "Multiple state-linked actors have increased reconnaissance activity against critical energy infrastructure in the region over the past six months. Security researchers observed probing of SCADA systems at three separate power distribution facilities. No successful breaches have been confirmed, but the pattern of activity mirrors precursor behavior seen before prior grid disruption incidents elsewhere.",
+      "source": "OpenThreat Research Group",
+      "source_type": "research_paper",
+      "publication_date": "2026-02-10",
+      "metadata": {"region": "Eastern Europe", "domain": "cybersecurity"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC002",
+      "title": "Defence Ministry Report on Border Infrastructure Modernization",
+      "content": "The government report details a three-year plan to modernize border surveillance infrastructure, including deployment of AI-assisted sensor networks and increased patrol drone coverage along the eastern frontier. The plan cites a 40% increase in unauthorized crossing attempts over the past 18 months as the primary justification.",
+      "source": "National Ministry of Defence",
+      "source_type": "government_publication",
+      "publication_date": "2026-01-22",
+      "metadata": {"region": "Eastern Border", "domain": "border_security"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC003",
+      "title": "Maritime Chokepoint Tensions Escalate Amid Naval Buildup",
+      "content": "Satellite imagery analyzed by independent researchers shows a marked increase in naval vessel presence near a key maritime chokepoint. Shipping insurers have raised premiums for vessels transiting the area by 12% in the last quarter, citing elevated risk of interdiction or incident.",
+      "source": "Maritime Security Monitor",
+      "source_type": "osint_report",
+      "publication_date": "2026-03-01",
+      "metadata": {"region": "South Asia", "domain": "maritime_security"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC004",
+      "title": "NATO Assessment of Emerging Hypersonic Weapons Proliferation",
+      "content": "This strategic assessment concludes that at least four non-NATO states have advanced hypersonic glide vehicle programs beyond early testing phases. The report recommends accelerated investment in hypersonic tracking and defense systems among member states, citing a narrowing technological gap.",
+      "source": "NATO",
+      "source_type": "strategic_report",
+      "publication_date": "2025-12-05",
+      "metadata": {"region": "Global", "domain": "defence_technology"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC005",
+      "title": "RAND Analysis: Military Modernization Trends in the Indo-Pacific",
+      "content": "The analysis finds that regional military modernization is increasingly focused on anti-access/area-denial capabilities, long-range precision strike systems, and unmanned platforms. The report notes that budget growth in this domain has outpaced overall defence spending growth by a factor of two over five years.",
+      "source": "RAND Corporation",
+      "source_type": "strategic_report",
+      "publication_date": "2026-01-18",
+      "metadata": {"region": "Indo-Pacific", "domain": "military_modernization"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC006",
+      "title": "Grid Intrusion Attempts Assessed as Low-Sophistication, Non-State Actors",
+      "content": "A follow-up technical investigation into the reported power grid reconnaissance activity concludes that the observed scanning behavior is consistent with commodity malware and opportunistic non-state actors, not a coordinated state-linked campaign. Attribution to sophisticated state actors is assessed as unlikely based on available indicators.",
+      "source": "Independent Cyber Forensics Consortium",
+      "source_type": "research_paper",
+      "publication_date": "2026-02-20",
+      "metadata": {"region": "Eastern Europe", "domain": "cybersecurity"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC007",
+      "title": "SIPRI-Style Dataset Summary: Regional Arms Transfer Trends",
+      "content": "Arms transfer volumes to the region increased by an estimated 18% year-over-year, driven primarily by air defense systems and armored vehicles. Three states accounted for the majority of imports, with two of them previously classified as minor arms importers in prior reporting periods.",
+      "source": "Arms Transfer Monitoring Initiative",
+      "source_type": "dataset_summary",
+      "publication_date": "2025-11-30",
+      "metadata": {"region": "Middle East", "domain": "strategic_policy"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC008",
+      "title": "US Department of Defense Statement on Regional Force Posture",
+      "content": "The Department of Defense announced adjustments to regional force posture, including rotational deployment of additional air assets. Officials characterized the move as a defensive measure intended to reassure allies rather than an escalatory action.",
+      "source": "U.S. Department of Defense",
+      "source_type": "government_publication",
+      "publication_date": "2026-02-14",
+      "metadata": {"region": "Indo-Pacific", "domain": "strategic_policy"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC009",
+      "title": "News Report: Drone Incident Near Contested Maritime Boundary",
+      "content": "A reconnaissance drone was reportedly intercepted near a contested maritime boundary, according to local news sources citing unnamed defence officials. Details remain unconfirmed and no official statement has been released by either government involved.",
+      "source": "Regional Defence Wire",
+      "source_type": "news_article",
+      "publication_date": "2026-03-05",
+      "metadata": {"region": "South China Sea", "domain": "maritime_security"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC010",
+      "title": "OpenAlex-Indexed Study on AI-Enabled Command and Control Systems",
+      "content": "This peer-reviewed study examines the integration of machine learning models into military command and control decision support systems. The authors highlight both potential decision-speed advantages and unresolved risks around explainability and automation bias in high-stakes contexts.",
+      "source": "Journal of Defence Technology Studies",
+      "source_type": "research_paper",
+      "publication_date": "2025-10-12",
+      "metadata": {"region": "Global", "domain": "defence_technology"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC011",
+      "title": "Border Crossing Statistics Contradict Ministry Justification",
+      "content": "An independent policy institute's analysis of border crossing data finds that unauthorized crossing attempts increased by approximately 9% over the past 18 months, substantially lower than the 40% figure cited in the government's infrastructure modernization proposal. The discrepancy has prompted calls for independent data verification.",
+      "source": "Civil Policy Research Institute",
+      "source_type": "research_paper",
+      "publication_date": "2026-02-01",
+      "metadata": {"region": "Eastern Border", "domain": "border_security"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC012",
+      "title": "Strategic Policy Brief: Alliance Cohesion Under Economic Pressure",
+      "content": "The policy brief argues that sustained economic pressure on smaller alliance members could erode collective defence commitments over the medium term, though it notes no immediate indicators of formal alliance fracture. The authors recommend enhanced burden-sharing arrangements as a mitigating measure.",
+      "source": "Strategic Studies Institute",
+      "source_type": "strategic_report",
+      "publication_date": "2026-01-08",
+      "metadata": {"region": "Europe", "domain": "strategic_policy"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC013",
+      "title": "Undersea Cable Disruption Raises Sabotage Concerns",
+      "content": "An undersea communications cable experienced an unexplained disruption near a strategically significant shipping lane. Investigators have not ruled out deliberate interference, though technical failure remains a plausible explanation pending further analysis. Regional naval forces have increased patrol activity in the area as a precaution.",
+      "source": "Maritime Security Monitor",
+      "source_type": "osint_report",
+      "publication_date": "2026-03-10",
+      "metadata": {"region": "North Atlantic", "domain": "maritime_security"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC014",
+      "title": "Military Modernization Budget Analysis: Unmanned Systems Investment",
+      "content": "Defence budget documents show a sustained increase in allocations toward unmanned aerial and maritime systems over three consecutive fiscal years, now representing approximately 15% of total procurement spending, up from 6% five years prior.",
+      "source": "National Ministry of Defence",
+      "source_type": "government_publication",
+      "publication_date": "2026-01-30",
+      "metadata": {"region": "East Asia", "domain": "military_modernization"},
+      "similarity_score": 0.0
+    },
+    {
+      "document_id": "DOC015",
+      "title": "Geopolitical Risk Outlook: Contested Resource Zones",
+      "content": "The outlook report identifies three contested resource-rich zones as elevated risk areas for the coming year, citing overlapping territorial claims, resource scarcity pressures, and a documented increase in state and non-state actor activity near the zones. The report emphasizes that risk elevation reflects structural conditions rather than any single triggering event.",
+      "source": "Global Geopolitical Risk Consortium",
+      "source_type": "strategic_report",
+      "publication_date": "2026-02-25",
+      "metadata": {"region": "Global", "domain": "geopolitical_events"},
+      "similarity_score": 0.0
+    }
+  ]
+}

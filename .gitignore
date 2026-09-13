@@ -1,0 +1,4 @@
+﻿.env
+__pycache__/
+defence_rag_pipeline/__pycache__/
+*.pyc
