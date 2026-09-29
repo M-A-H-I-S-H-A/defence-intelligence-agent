@@ -96,9 +96,23 @@ def answer_query(query: str, where: dict | None = None) -> list[dict]:
     client = vector_store.get_client(config.CHROMA_DIR)
     collection = vector_store.get_or_create_collection(client, config.CHROMA_COLLECTION_NAME)
 
-    candidates = retriever.retrieve_evidence(
-        query, collection, config.EMBEDDING_MODEL_NAME, config.RETRIEVAL_TOP_K, where,
-    )
+    if where:
+        candidates = retriever.retrieve_evidence(
+            query, collection, config.EMBEDDING_MODEL_NAME, config.RETRIEVAL_TOP_K, where,
+        )
+    else:
+        # Retrieve separately per source so a large source (SIPRI) can't
+        # crowd a smaller one (GDELT) out of the candidate pool before
+        # ranking even has a chance to balance them.
+        per_source_k = max(config.RETRIEVAL_TOP_K // 2, 10)
+        sipri_candidates = retriever.retrieve_evidence(
+            query, collection, config.EMBEDDING_MODEL_NAME, per_source_k, where={"source": "sipri"},
+        )
+        gdelt_candidates = retriever.retrieve_evidence(
+            query, collection, config.EMBEDDING_MODEL_NAME, per_source_k, where={"source": "gdelt_gkg"},
+        )
+        candidates = sipri_candidates + gdelt_candidates
+
     if not candidates:
         logger.warning("No candidates retrieved for query=%r", query)
         return []
