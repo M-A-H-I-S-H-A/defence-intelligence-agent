@@ -30,9 +30,34 @@ def rank_evidence(
         )
         cand["final_score"] = round(score, 4)
 
-    ranked = sorted(candidates, key=lambda c: c["final_score"], reverse=True)
-    top = ranked[:top_n]
-    logger.info("Ranked %d candidates, returning top %d", len(candidates), len(top))
+    # Rank within each source separately, then combine, so one source
+    # (e.g. SIPRI's high-reliability numbers) can't fully crowd out
+    # another (e.g. GDELT's current events) just by scoring higher overall.
+    by_source: Dict[str, List[Dict[str, Any]]] = {}
+    for cand in candidates:
+        source = cand["metadata"].get("source", "unknown")
+        by_source.setdefault(source, []).append(cand)
+
+    for source in by_source:
+        by_source[source].sort(key=lambda c: c["final_score"], reverse=True)
+
+    half = max(top_n // 2, 1)
+    top: List[Dict[str, Any]] = []
+    sources = list(by_source.keys())
+    per_source_quota = {s: half for s in sources} if len(sources) > 1 else {sources[0]: top_n}
+
+    for source, quota in per_source_quota.items():
+        top.extend(by_source[source][:quota])
+
+    if len(top) < top_n:
+        remaining = sorted(
+            [c for c in candidates if c not in top],
+            key=lambda c: c["final_score"], reverse=True,
+        )
+        top.extend(remaining[: top_n - len(top)])
+
+    top = sorted(top, key=lambda c: c["final_score"], reverse=True)[:top_n]
+    logger.info("Ranked %d candidates, returning top %d (source-balanced)", len(candidates), len(top))
     return top
 
 
